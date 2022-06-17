@@ -25,10 +25,9 @@ fun ProfileImageContent(
     viewModel: ProfileImageViewModel = hiltViewModel(),
     openGallery: () -> Unit
 ) {
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize().padding(bottom = 64.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Bottom
+        contentAlignment = Alignment.BottomCenter
     ) {
         Button(
             onClick = {
@@ -47,10 +46,9 @@ fun ProfileImageContent(
         is Success -> {
             val imageUrl = getImageFromDatabaseResponse.data
             imageUrl?.let {
-                Column(
+                Box(
                     modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Top
+                    contentAlignment = Alignment.TopCenter
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
