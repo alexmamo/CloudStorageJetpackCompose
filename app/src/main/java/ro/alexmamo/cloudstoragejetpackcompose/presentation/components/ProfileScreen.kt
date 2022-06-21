@@ -19,11 +19,11 @@ import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.DISPLAY_IT_MESSAGE
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.IMAGE_SUCCESSFULLY_ADDED_MESSAGE
 import ro.alexmamo.cloudstoragejetpackcompose.core.Utils.Companion.print
 import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.*
-import ro.alexmamo.cloudstoragejetpackcompose.presentation.ProfileImageViewModel
+import ro.alexmamo.cloudstoragejetpackcompose.presentation.ProfileViewModel
 
 @Composable
 fun ProfileImageScreen(
-    viewModel: ProfileImageViewModel = hiltViewModel()
+    viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -50,12 +50,9 @@ fun ProfileImageScreen(
 
     when(val addImageToStorageResponse = viewModel.addImageToStorageState.value) {
         is Loading -> ProgressBar()
-        is Success -> {
-            val isImageAddedToStorage = addImageToStorageResponse.data
-            isImageAddedToStorage?.let { downloadUrl ->
-                LaunchedEffect(isImageAddedToStorage) {
-                    viewModel.addImageToDatabase(downloadUrl)
-                }
+        is Success -> addImageToStorageResponse.data?.let { downloadUrl ->
+            LaunchedEffect(downloadUrl) {
+                viewModel.addImageToDatabase(downloadUrl)
             }
         }
         is Failure -> LaunchedEffect(Unit) {
@@ -75,13 +72,10 @@ fun ProfileImageScreen(
 
     when(val addImageToDatabaseResponse = viewModel.addImageToDatabaseState.value) {
         is Loading -> ProgressBar()
-        is Success -> {
-            val isImageAddedToDatabase = addImageToDatabaseResponse.data
-            isImageAddedToDatabase?.let {
-                if (isImageAddedToDatabase) {
-                    LaunchedEffect(isImageAddedToDatabase) {
-                        showSnackBar()
-                    }
+        is Success -> addImageToDatabaseResponse.data?.let { isImageAddedToDatabase ->
+            if (isImageAddedToDatabase) {
+                LaunchedEffect(isImageAddedToDatabase) {
+                    showSnackBar()
                 }
             }
         }

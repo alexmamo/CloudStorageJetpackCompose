@@ -32,7 +32,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addImageToFirestore(downloadUrl: Uri) = flow {
+    override suspend fun addImageUrlToFirestore(downloadUrl: Uri) = flow {
         try {
             emit(Loading)
             imagesCollRef.document(UID).set(mapOf(
@@ -45,11 +45,11 @@ class ProfileImageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getImageFromFirestore() = flow {
+    override suspend fun getImageUrlFromFirestore() = flow {
         try {
             emit(Loading)
-            val url = imagesCollRef.document(UID).get().await().getString(URL)
-            emit(Success(url))
+            val imageUrl = imagesCollRef.document(UID).get().await().getString(URL)
+            emit(Success(imageUrl))
         } catch (e: Exception) {
             emit(Failure(e))
         }
