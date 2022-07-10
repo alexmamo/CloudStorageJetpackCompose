@@ -1,4 +1,4 @@
-package ro.alexmamo.cloudstoragejetpackcompose.presentation.components
+package ro.alexmamo.cloudstoragejetpackcompose.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

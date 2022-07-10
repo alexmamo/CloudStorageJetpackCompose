@@ -1,12 +1,13 @@
 package ro.alexmamo.cloudstoragejetpackcompose.data.repository
 
 import android.net.Uri
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.storage.StorageReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.CREATED_AT
+import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.IMAGES
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.PROFILE_IMAGE_NAME
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.UID
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.URL
@@ -17,13 +18,13 @@ import javax.inject.Singleton
 
 @Singleton
 class ProfileImageRepositoryImpl @Inject constructor(
-    private val imagesStorageRef: StorageReference,
-    private val imagesCollRef: CollectionReference
+    private val storage: FirebaseStorage,
+    private val db: FirebaseFirestore
 ) : ProfileImageRepository {
     override suspend fun addImageToFirebaseStorage(imageUri: Uri) = flow {
         try {
             emit(Loading)
-            val downloadUrl = imagesStorageRef.child(PROFILE_IMAGE_NAME)
+            val downloadUrl = storage.reference.child(IMAGES).child(PROFILE_IMAGE_NAME)
                 .putFile(imageUri).await()
                 .storage.downloadUrl.await()
             emit(Success(downloadUrl))
@@ -35,7 +36,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
     override suspend fun addImageUrlToFirestore(downloadUrl: Uri) = flow {
         try {
             emit(Loading)
-            imagesCollRef.document(UID).set(mapOf(
+            db.collection(IMAGES).document(UID).set(mapOf(
                 URL to downloadUrl,
                 CREATED_AT to FieldValue.serverTimestamp()
             )).await()
@@ -48,7 +49,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
     override suspend fun getImageUrlFromFirestore() = flow {
         try {
             emit(Loading)
-            val imageUrl = imagesCollRef.document(UID).get().await().getString(URL)
+            val imageUrl = db.collection(IMAGES).document(UID).get().await().getString(URL)
             emit(Success(imageUrl))
         } catch (e: Exception) {
             emit(Failure(e))

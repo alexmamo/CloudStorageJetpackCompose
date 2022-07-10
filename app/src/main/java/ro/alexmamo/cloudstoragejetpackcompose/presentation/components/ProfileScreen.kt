@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
+import ro.alexmamo.cloudstoragejetpackcompose.components.ProgressBar
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.ALL_IMAGES
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.DISPLAY_IT_MESSAGE
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.IMAGE_SUCCESSFULLY_ADDED_MESSAGE

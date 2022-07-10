@@ -1,15 +1,14 @@
 package ro.alexmamo.cloudstoragejetpackcompose.di
 
-import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.IMAGES
 import ro.alexmamo.cloudstoragejetpackcompose.data.repository.ProfileImageRepositoryImpl
 import ro.alexmamo.cloudstoragejetpackcompose.domain.repository.ProfileImageRepository
 
@@ -17,17 +16,17 @@ import ro.alexmamo.cloudstoragejetpackcompose.domain.repository.ProfileImageRepo
 @InstallIn(SingletonComponent::class)
 class AppModule {
     @Provides
-    fun provideImagesStorageReference() =  Firebase.storage.reference.child(IMAGES)
+    fun provideFirebaseStorage() =  Firebase.storage
 
     @Provides
-    fun provideImagesCollectionReference() = Firebase.firestore.collection(IMAGES)
+    fun provideFirebaseFirestore() = Firebase.firestore
 
     @Provides
     fun provideProfileImageRepository(
-        imagesStorageRef: StorageReference,
-        imagesCollRef: CollectionReference
+        storage: FirebaseStorage,
+        db: FirebaseFirestore
     ): ProfileImageRepository = ProfileImageRepositoryImpl(
-        imagesStorageRef = imagesStorageRef,
-        imagesCollRef = imagesCollRef
+        storage = storage,
+        db = db
     )
 }
