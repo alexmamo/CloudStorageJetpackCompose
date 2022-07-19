@@ -27,9 +27,7 @@ fun ProfileImageContent(
         contentAlignment = Alignment.BottomCenter
     ) {
         Button(
-            onClick = {
-                openGallery()
-            }
+            onClick = openGallery
         ) {
             Text(
                 text = OPEN_GALLERY,
