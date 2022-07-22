@@ -39,7 +39,7 @@ fun ProfileImageScreen(
             Box(
                 modifier = Modifier.fillMaxSize().padding(padding)
             ) {
-                ProfileImageContent(
+                ProfileContent(
                     openGallery = {
                         galleryLauncher.launch(ALL_IMAGES)
                     }
@@ -49,7 +49,7 @@ fun ProfileImageScreen(
         scaffoldState = scaffoldState
     )
 
-    when(val addImageToStorageResponse = viewModel.addImageToStorageState.value) {
+    when(val addImageToStorageResponse = viewModel.addImageToStorageResponse) {
         is Loading -> ProgressBar()
         is Success -> addImageToStorageResponse.data?.let { downloadUrl ->
             LaunchedEffect(downloadUrl) {
@@ -71,7 +71,7 @@ fun ProfileImageScreen(
         }
     }
 
-    when(val addImageToDatabaseResponse = viewModel.addImageToDatabaseState.value) {
+    when(val addImageToDatabaseResponse = viewModel.addImageToDatabaseResponse) {
         is Loading -> ProgressBar()
         is Success -> addImageToDatabaseResponse.data?.let { isImageAddedToDatabase ->
             if (isImageAddedToDatabase) {

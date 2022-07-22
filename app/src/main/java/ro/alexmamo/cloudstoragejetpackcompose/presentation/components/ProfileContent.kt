@@ -18,7 +18,7 @@ import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.*
 import ro.alexmamo.cloudstoragejetpackcompose.presentation.ProfileViewModel
 
 @Composable
-fun ProfileImageContent(
+fun ProfileContent(
     viewModel: ProfileViewModel = hiltViewModel(),
     openGallery: () -> Unit
 ) {
@@ -36,7 +36,7 @@ fun ProfileImageContent(
         }
     }
 
-    when(val getImageFromDatabaseResponse = viewModel.getImageFromDatabaseState.value) {
+    when(val getImageFromDatabaseResponse = viewModel.getImageFromDatabaseResponse) {
         is Loading -> ProgressBar()
         is Success -> getImageFromDatabaseResponse.data?.let { imageUrl ->
             ProfileImageContent(imageUrl)

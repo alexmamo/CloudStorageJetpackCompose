@@ -1,8 +1,9 @@
 package ro.alexmamo.cloudstoragejetpackcompose.presentation
 
 import android.net.Uri
-import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,30 +17,28 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     private val repo: ProfileImageRepository
 ): ViewModel() {
-    private val _addImageToStorageState = mutableStateOf<Response<Uri>>(Success(null))
-    val addImageToStorageState: State<Response<Uri>> = _addImageToStorageState
-
-    private val _addImageToDatabaseState = mutableStateOf<Response<Boolean>>(Success(null))
-    val addImageToDatabaseState: State<Response<Boolean>> = _addImageToDatabaseState
-
-    private val _getImageFromDatabaseState = mutableStateOf<Response<String>>(Success(null))
-    val getImageFromDatabaseState: State<Response<String>> = _getImageFromDatabaseState
+    var addImageToStorageResponse by mutableStateOf<Response<Uri>>(Success(null))
+        private set
+    var addImageToDatabaseResponse by mutableStateOf<Response<Boolean>>(Success(null))
+        private set
+    var getImageFromDatabaseResponse by mutableStateOf<Response<String>>(Success(null))
+        private set
 
     fun addImageToStorage(imageUri: Uri) = viewModelScope.launch {
         repo.addImageToFirebaseStorage(imageUri).collect { response ->
-            _addImageToStorageState.value = response
+            addImageToStorageResponse = response
         }
     }
 
     fun addImageToDatabase(downloadUrl: Uri) = viewModelScope.launch {
         repo.addImageUrlToFirestore(downloadUrl).collect { response ->
-            _addImageToDatabaseState.value = response
+            addImageToDatabaseResponse = response
         }
     }
 
     fun getImageFromDatabase() = viewModelScope.launch {
         repo.getImageUrlFromFirestore().collect { response ->
-            _getImageFromDatabaseState.value = response
+            getImageFromDatabaseResponse = response
         }
     }
 }
