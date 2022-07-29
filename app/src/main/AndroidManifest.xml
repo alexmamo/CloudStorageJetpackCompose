@@ -14,7 +14,7 @@
         android:theme="@style/Theme.CloudStorageJetpackCompose"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.ProfileActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
