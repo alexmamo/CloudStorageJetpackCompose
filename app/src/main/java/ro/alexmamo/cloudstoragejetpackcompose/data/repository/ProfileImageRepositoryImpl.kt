@@ -21,7 +21,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val db: FirebaseFirestore
 ) : ProfileImageRepository {
-    override suspend fun addImageToFirebaseStorage(imageUri: Uri) = flow {
+    override fun addImageToFirebaseStorage(imageUri: Uri) = flow {
         try {
             emit(Loading)
             val downloadUrl = storage.reference.child(IMAGES).child(PROFILE_IMAGE_NAME)
@@ -33,7 +33,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addImageUrlToFirestore(downloadUrl: Uri) = flow {
+    override fun addImageUrlToFirestore(downloadUrl: Uri) = flow {
         try {
             emit(Loading)
             db.collection(IMAGES).document(UID).set(mapOf(
@@ -46,7 +46,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getImageUrlFromFirestore() = flow {
+    override fun getImageUrlFromFirestore() = flow {
         try {
             emit(Loading)
             val imageUrl = db.collection(IMAGES).document(UID).get().await().getString(URL)
