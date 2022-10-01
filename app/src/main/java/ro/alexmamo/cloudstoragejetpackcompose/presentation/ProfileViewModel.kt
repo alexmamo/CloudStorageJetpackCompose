@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response
+import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.Loading
 import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.Success
 import ro.alexmamo.cloudstoragejetpackcompose.domain.repository.ProfileImageRepository
 import javax.inject.Inject
@@ -25,20 +26,17 @@ class ProfileViewModel @Inject constructor(
         private set
 
     fun addImageToStorage(imageUri: Uri) = viewModelScope.launch {
-        repo.addImageToFirebaseStorage(imageUri).collect { response ->
-            addImageToStorageResponse = response
-        }
+        addImageToStorageResponse = Loading
+        addImageToStorageResponse = repo.addImageToFirebaseStorage(imageUri)
     }
 
     fun addImageToDatabase(downloadUrl: Uri) = viewModelScope.launch {
-        repo.addImageUrlToFirestore(downloadUrl).collect { response ->
-            addImageToDatabaseResponse = response
-        }
+        addImageToDatabaseResponse = Loading
+        addImageToDatabaseResponse = repo.addImageUrlToFirestore(downloadUrl)
     }
 
     fun getImageFromDatabase() = viewModelScope.launch {
-        repo.getImageUrlFromFirestore().collect { response ->
-            getImageFromDatabaseResponse = response
-        }
+        getImageFromDatabaseResponse = Loading
+        getImageFromDatabaseResponse = repo.getImageUrlFromFirestore()
     }
 }

@@ -6,20 +6,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import ro.alexmamo.cloudstoragejetpackcompose.components.ProgressBar
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.OPEN_GALLERY
-import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.*
-import ro.alexmamo.cloudstoragejetpackcompose.presentation.ProfileViewModel
 
 @Composable
 fun ProfileContent(
-    viewModel: ProfileViewModel = hiltViewModel(),
     openGallery: () -> Unit
 ) {
     Box(
@@ -36,13 +30,9 @@ fun ProfileContent(
         }
     }
 
-    when(val getImageFromDatabaseResponse = viewModel.getImageFromDatabaseResponse) {
-        is Loading -> ProgressBar()
-        is Success -> getImageFromDatabaseResponse.data?.let { imageUrl ->
+    GetImageFromDatabase(
+        createProfileImageContent = { imageUrl ->
             ProfileImageContent(imageUrl)
         }
-        is Failure -> LaunchedEffect(Unit) {
-            print(getImageFromDatabaseResponse.e)
-        }
-    }
+    )
 }

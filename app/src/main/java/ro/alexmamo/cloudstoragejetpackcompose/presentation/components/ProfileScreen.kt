@@ -9,17 +9,13 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarResult.ActionPerformed
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.launch
-import ro.alexmamo.cloudstoragejetpackcompose.components.ProgressBar
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.ALL_IMAGES
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.DISPLAY_IT_MESSAGE
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.IMAGE_SUCCESSFULLY_ADDED_MESSAGE
-import ro.alexmamo.cloudstoragejetpackcompose.core.Utils.Companion.print
-import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.*
 import ro.alexmamo.cloudstoragejetpackcompose.presentation.ProfileViewModel
 
 @Composable
@@ -49,17 +45,11 @@ fun ProfileImageScreen(
         scaffoldState = scaffoldState
     )
 
-    when(val addImageToStorageResponse = viewModel.addImageToStorageResponse) {
-        is Loading -> ProgressBar()
-        is Success -> addImageToStorageResponse.data?.let { downloadUrl ->
-            LaunchedEffect(downloadUrl) {
-                viewModel.addImageToDatabase(downloadUrl)
-            }
+    AddImageToStorage(
+        addImageToDatabase = { downloadUrl ->
+            viewModel.addImageToDatabase(downloadUrl)
         }
-        is Failure -> LaunchedEffect(Unit) {
-            print(addImageToStorageResponse.e)
-        }
-    }
+    )
 
     fun showSnackBar() = coroutineScope.launch {
         val result = scaffoldState.snackbarHostState.showSnackbar(
@@ -71,17 +61,11 @@ fun ProfileImageScreen(
         }
     }
 
-    when(val addImageToDatabaseResponse = viewModel.addImageToDatabaseResponse) {
-        is Loading -> ProgressBar()
-        is Success -> addImageToDatabaseResponse.data?.let { isImageAddedToDatabase ->
+    AddImageToDatabase(
+        showSnackBar = { isImageAddedToDatabase ->
             if (isImageAddedToDatabase) {
-                LaunchedEffect(isImageAddedToDatabase) {
-                    showSnackBar()
-                }
+                showSnackBar()
             }
         }
-        is Failure -> LaunchedEffect(Unit) {
-            print(addImageToDatabaseResponse.e)
-        }
-    }
+    )
 }
