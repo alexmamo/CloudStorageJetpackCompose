@@ -10,9 +10,11 @@ import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.IMAGES
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.PROFILE_IMAGE_NAME
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.UID
 import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.URL
-import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response
 import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.Failure
 import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response.Success
+import ro.alexmamo.cloudstoragejetpackcompose.domain.repository.AddImageToStorageResponse
+import ro.alexmamo.cloudstoragejetpackcompose.domain.repository.AddImageUrlToFirestoreResponse
+import ro.alexmamo.cloudstoragejetpackcompose.domain.repository.GetImageUrlFromFirestoreResponse
 import ro.alexmamo.cloudstoragejetpackcompose.domain.repository.ProfileImageRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,7 +24,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
     private val storage: FirebaseStorage,
     private val db: FirebaseFirestore
 ) : ProfileImageRepository {
-    override suspend fun addImageToFirebaseStorage(imageUri: Uri): Response<Uri> {
+    override suspend fun addImageToFirebaseStorage(imageUri: Uri): AddImageToStorageResponse {
         return try {
             val downloadUrl = storage.reference.child(IMAGES).child(PROFILE_IMAGE_NAME)
                 .putFile(imageUri).await()
@@ -33,7 +35,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addImageUrlToFirestore(downloadUrl: Uri): Response<Boolean> {
+    override suspend fun addImageUrlToFirestore(downloadUrl: Uri): AddImageUrlToFirestoreResponse {
         return try {
             db.collection(IMAGES).document(UID).set(mapOf(
                 URL to downloadUrl,
@@ -45,7 +47,7 @@ class ProfileImageRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getImageUrlFromFirestore(): Response<String> {
+    override suspend fun getImageUrlFromFirestore(): GetImageUrlFromFirestoreResponse {
         return try {
             val imageUrl = db.collection(IMAGES).document(UID).get().await().getString(URL)
             Success(imageUrl)

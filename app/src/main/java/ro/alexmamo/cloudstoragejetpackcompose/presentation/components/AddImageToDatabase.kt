@@ -20,8 +20,6 @@ fun AddImageToDatabase(
                 showSnackBar(isImageAddedToDatabase)
             }
         }
-        is Failure -> LaunchedEffect(Unit) {
-            print(addImageToDatabaseResponse.e)
-        }
+        is Failure -> print(addImageToDatabaseResponse.e)
     }
 }

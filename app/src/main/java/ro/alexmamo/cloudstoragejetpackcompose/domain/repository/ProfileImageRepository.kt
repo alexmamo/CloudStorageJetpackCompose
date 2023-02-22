@@ -3,10 +3,14 @@ package ro.alexmamo.cloudstoragejetpackcompose.domain.repository
 import android.net.Uri
 import ro.alexmamo.cloudstoragejetpackcompose.domain.model.Response
 
+typealias AddImageToStorageResponse = Response<Uri>
+typealias AddImageUrlToFirestoreResponse = Response<Boolean>
+typealias GetImageUrlFromFirestoreResponse = Response<String>
+
 interface ProfileImageRepository {
-    suspend fun addImageToFirebaseStorage(imageUri: Uri): Response<Uri>
+    suspend fun addImageToFirebaseStorage(imageUri: Uri): AddImageToStorageResponse
 
-    suspend fun addImageUrlToFirestore(downloadUrl: Uri): Response<Boolean>
+    suspend fun addImageUrlToFirestore(downloadUrl: Uri): AddImageUrlToFirestoreResponse
 
-    suspend fun getImageUrlFromFirestore(): Response<String>
+    suspend fun getImageUrlFromFirestore():GetImageUrlFromFirestoreResponse
 }

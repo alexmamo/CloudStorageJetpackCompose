@@ -1,7 +1,6 @@
 package ro.alexmamo.cloudstoragejetpackcompose.presentation.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import ro.alexmamo.cloudstoragejetpackcompose.components.ProgressBar
 import ro.alexmamo.cloudstoragejetpackcompose.core.Utils.Companion.print
@@ -18,8 +17,6 @@ fun GetImageFromDatabase(
         is Success -> getImageFromDatabaseResponse.data?.let { imageUrl ->
             createProfileImageContent(imageUrl)
         }
-        is Failure -> LaunchedEffect(Unit) {
-            print(getImageFromDatabaseResponse.e)
-        }
+        is Failure -> print(getImageFromDatabaseResponse.e)
     }
 }

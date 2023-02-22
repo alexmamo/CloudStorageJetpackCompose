@@ -21,8 +21,6 @@ fun AddImageToStorage(
                 addImageToDatabase(downloadUrl)
             }
         }
-        is Failure -> LaunchedEffect(Unit) {
-            print(addImageToStorageResponse.e)
-        }
+        is Failure -> print(addImageToStorageResponse.e)
     }
 }

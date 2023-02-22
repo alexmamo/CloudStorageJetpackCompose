@@ -5,8 +5,8 @@ import ro.alexmamo.cloudstoragejetpackcompose.core.Constants.TAG
 
 class Utils {
     companion object {
-        fun print(e: Exception?) {
-            Log.d(TAG, e?.message ?: e.toString())
+        fun print(e: Exception?) = e?.apply {
+            Log.e(TAG, stackTraceToString())
         }
     }
 }

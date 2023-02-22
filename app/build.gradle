@@ -26,11 +26,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_16
+        targetCompatibility JavaVersion.VERSION_16
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = JavaVersion.VERSION_16
     }
     buildFeatures {
         compose true
@@ -38,23 +38,13 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
     }
-    packagingOptions {
-        resources {
-            excludes += '/META-INF/{AL2.0,LGPL2.1}'
-        }
-    }
     namespace "ro.alexmamo.cloudstoragejetpackcompose"
 }
 
 dependencies {
-    //ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$viewmodel_version"
-    //LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$live_data_version"
-    //Activity Compose
-    implementation "androidx.activity:activity-compose:$activity_compose_version"
     //Compose
-    implementation "androidx.compose.material:material:$material_version"
+    implementation platform("androidx.compose:compose-bom:$compose_bom_version")
+    implementation "androidx.compose.material:material"
     //Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
@@ -64,8 +54,6 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     implementation "com.google.firebase:firebase-storage-ktx"
     implementation "com.google.firebase:firebase-firestore-ktx"
-    //Play Services
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$play_services_version"
     //Coil
     implementation "io.coil-kt:coil-compose:$coil_compose_version"
 }
