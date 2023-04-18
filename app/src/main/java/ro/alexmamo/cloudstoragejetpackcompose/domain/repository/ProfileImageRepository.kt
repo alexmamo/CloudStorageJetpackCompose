@@ -12,5 +12,5 @@ interface ProfileImageRepository {
 
     suspend fun addImageUrlToFirestore(downloadUrl: Uri): AddImageUrlToFirestoreResponse
 
-    suspend fun getImageUrlFromFirestore():GetImageUrlFromFirestoreResponse
+    suspend fun getImageUrlFromFirestore(): GetImageUrlFromFirestoreResponse
 }
